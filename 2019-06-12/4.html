@@ -1,0 +1,162 @@
+<!doctype html>
+<!--
+ТЗ по front end
+
+Создать HTML страницу с адаптивным дизайном под любое устройство. Можно использовать bootstrap.
+
+По центру:
+- Заголовок "Олимпиада"
+- Поле ввода с лейблом "Участники", плейсхолдер "введите имена участников через запятую" (доступны только кириллические буквы и запятая)
+- Кнопка "Добавить" (должна реагировать не только на щелчок мышью, но и на нажатие enter)
+
+При первом нажатии на кнопку должна появляться таблица с полями: id, имя, очки. Поле ввода "Участники" должно становиться пустым. Плейсхолдер при этом прежний.
+- id - это порядковый номер в списке участников, который ввёл пользователь.
+- очки для каждого участника сгеренировать рандомно.
+
+Все столбцы таблицы должны быть сортируемыми при нажатии на заголовок столбца.
+
+Если таблица уже отобразилась, то снова при нажатии на кнопку "Добавить" в таблицу должны добавляться участники, которых дописали.
+
+Все ошибки пользователя при добавлении участников выводить через модальное окно с небольшим описанием, чтобы пользователь мог исправиться.
+
+Пожелание: Страница должна иметь приятный стиль в спокойных тонах.
+-->
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="http://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css"
+          crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+<div class="container" style="text-align: center;">
+    <h1>Олимпиада</h1>
+</div>
+
+<form id="form-people">
+    <div class="form-group">
+        <label for="exampleFormControlInput1">Участники</label>
+        <input type="text"
+               class="form-control"
+               id="exampleFormControlInput1"
+               placeholder="Введите имена участников через запятую"
+               pattern="^[А-Яа-яЁё,]+$"
+        >
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+
+<div class="container" style="display: none" id="container-table-people">
+    <table id="example" class="table table-striped table-bordered sortable" style="width:100%">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Очки</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Очки</th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<!-- Button trigger modal -->
+<!--button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+    Launch demo modal
+</button-->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Ошибка</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-text-msg">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <!--button type="button" class="btn btn-primary">Save changes</button-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script src="http://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"
+        crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $("#form-people").submit(function (e) {
+            var peopleInString = $("#exampleFormControlInput1");
+            var peoples = peopleInString.val().split(',');
+            var id = $("#example tbody tr").length;
+
+            if (peoples.length > 0) {
+                peoples.forEach(function (element) {
+                    if (element === '') {
+                        return;
+                    }
+
+                    $("#example tbody").append('<tr><td>' + (++id) + '</td><td>' + element + '</td><td>' + (Math.floor((Math.random() * 100) + 1)) + '</td></tr>');
+                });
+            }
+
+            if (id > 0) {
+                $("#container-table-people").show();
+                $.bootstrapSortable({applyLast: true})
+            }
+
+            if (peopleInString.val() === '') {
+                $('#modal-text-msg').text('Введите имя участника');
+                $('#exampleModalCenter').modal('toggle');
+            }
+            peopleInString.val('');
+            return false;
+        });
+
+        // блокируем ввод кроме кирилицы и запятой
+        $('#exampleFormControlInput1').keypress(function (e) {
+            console.log(e.which);
+            var allowChars = [44, 13];
+            if (allowChars.indexOf(e.which) !== -1 || (e.which >= 1040 && e.which <= 1103)) {
+                // ничего
+            } else {
+                return false;
+            }
+        });
+    });
+</script>
+</body>
+</html>
