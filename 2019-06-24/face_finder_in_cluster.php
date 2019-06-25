@@ -182,6 +182,7 @@ class FaceFinderInCluster extends FaceFinder
      */
     private function getPointFromClusterIndex(int $index): array
     {
+        // todo Перепроверить работу функцию, нужно писать тесты. Есть подозрения в логике
         return [
             ($index % ($this->_clusterInX)),// x
             ($index / ($this->_clusterInX)),// y,
@@ -198,6 +199,7 @@ class FaceFinderInCluster extends FaceFinder
      */
     private function getClusterIndex(int $x, int $y, int $z): int
     {
+        // todo Перепроверить работу функцию, нужно писать тесты. Есть подозрения в логике
         $xIndex = (int)floor($x / self::CLUSTER_SIZE);
         $yIndex = (int)floor($y / self::CLUSTER_SIZE);
         $zIndex = (int)floor($z / self::CLUSTER_SIZE);
