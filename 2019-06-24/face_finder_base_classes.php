@@ -85,18 +85,14 @@ class FaceFinder implements FaceFinderInterface
     }
 
     /**
-     * Удаление всех лиц из базы данных и сброс ключа
-     * реализовано дословно, альтернативный вариант удалить всю таблицу.
+     * Удаление всех лиц из базы данных и сброс ключа.
      *
      * Removes all faces in DB and (!) reset faces id sequence
      */
     public function flush(): void
     {
-        // Удалить все данные
-        DataBase::pdo()->query('DELETE FROM `' . self::TABLE_NAME . '`');
-
-        // Сбросить счетчик
-        DataBase::pdo()->query('ALTER TABLE `' . self::TABLE_NAME . '` AUTO_INCREMENT=1');
+        // Удалить все данные и сбросить счетчик
+        DataBase::pdo()->query('TRUNCATE TABLE `' . self::TABLE_NAME . '`');
     }
 
     /**
